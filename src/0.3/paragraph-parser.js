@@ -18,7 +18,7 @@ class ParagraphMultilineMarginStyleOutput extends ParseOutput {
         let begin=0;
         if (0 < lines.length && '' === lines[0].trim()) {
             for (begin=0; begin<lines.length; begin++) {
-                if ('' !== lines[begin].trim()) { break; }
+                if ('' !== lines[begin].trim()) { if (0<begin) {begin--;} break; }
             }
         }
         // 末尾から連続した空白要素を削除する
@@ -33,10 +33,12 @@ class ParagraphMultilineMarginStyleOutput extends ParseOutput {
         if (0 < lines.length && '' === lines.slice(-1)[0].trim()) {
             for (; 0<=end; end--) {
 //                console.log(end, lines[end])
-                if ('' !== lines[end].trim()) { end++; break; }
+                if ('' !== lines[end].trim()) { end++; break; } // if(end<lines.length)
             }
         }
-        return lines.slice(begin, end);
+//        console.log(begin, end)
+//        return lines.slice(begin, end);
+        return lines.slice(begin, Math.max(end, 1));
     }
     parse(text, regexp) {
         let lines = text.split(/\r\n|\r|\n/g);

@@ -13,6 +13,9 @@ window.addEventListener('load', (event) => {
 
 　パラグラフ４。パラグラフ内に１行だけ改行があり、直後に１字以上の空白文字以外の字があればbrタグに変換する。
 　たとえばこのように。
+　何行でもイケる。
+べつに字下げしなくてもいい。
+　いわゆる段落。
 
 ――そのとき、神風が吹いた
 
@@ -22,6 +25,9 @@ window.addEventListener('load', (event) => {
 `;
     let html = parser.parse(text)
     document.body.innerHTML += `${html}<hr>`
+    document.body.innerHTML += `${parser.parse('改行が一切ない。')}<hr>`
+    document.body.innerHTML += `${parser.parse('改行がひとつ。\nパラグラフなし。')}<hr>`
+    document.body.innerHTML += `${parser.parse('\n\n\n先頭と末尾に改行3つ。\n\n\n')}<hr>`
 
     // Poem
     parser = new Parser(ParagraphParseSetFactory.Poem);
@@ -40,12 +46,15 @@ window.addEventListener('load', (event) => {
 文末に改行が１行だけあれば同じパラグラフの中でbrが入る。
 こんな感じで。
 それを複数行できる。
-何行でも。
-ただし２行以上改行があったり文字列の終端ならそこでパラグラフ終了。
+　べつに字下げしてもいい。
+２行以上改行があったり文字列の終端ならそこでパラグラフ終了。
 
 以上。
 `;
     html = parser.parse(text)
     document.body.innerHTML += `${html}<hr>`
+    document.body.innerHTML += `${parser.parse('改行が一切ない。')}<hr>`
+    document.body.innerHTML += `${parser.parse('改行がひとつ。\nパラグラフなし。')}<hr>`
+    document.body.innerHTML += `${parser.parse('\n\n\n先頭と末尾に改行3つ。\n\n\n')}<hr>`
 
 });
