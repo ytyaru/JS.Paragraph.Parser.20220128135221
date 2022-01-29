@@ -76,9 +76,9 @@ class ParagraphMultilineMarginStyleOutput extends ParseOutput {
         const psStrs = [];
         for (let p of ps) {
             const attrStyleValue= (0 < p.brLen) ? '' : '';
-            const attr = new Hash();
+            const attr = new Map();
             if (0 < p.brLen) { attr['style'] = `margin-block-end:${p.brLen}em`; }
-            psStrs.push(ElementString('p', p.content, attr));
+            psStrs.push(ElementString.get('p', p.content, attr));
         }
         console.log(psStrs.join(''))
         return psStrs.join('');
