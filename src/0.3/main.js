@@ -1,6 +1,7 @@
 window.addEventListener('load', (event) => {
     console.log(ParagraphParseSetFactory)
     console.log(ParagraphParseSetFactory.Book)
+    // Book
     let parser = new Parser(ParagraphParseSetFactory.Book);
     let text = `
 　パラグラフ１。下の行に２つの改行があるときパラグラフになる。改行箇所に空白文字が含まれていても無視する。HTMLに変換するとき、その空白文字は削除される。
@@ -20,6 +21,28 @@ window.addEventListener('load', (event) => {
 　上記のようにダッシュや鉤括弧ではじまるときは字下げすべきでない。字下げについては全角スペースを入れるか否かで制御する。自動化したいならlintツールを用いる。いずれにせよ本パーサでは対象外。
 `;
     let html = parser.parse(text)
-//    document.body.innerHTML += `<p>${text}</p><p>${html}</p><hr>`
     document.body.innerHTML += `${html}<hr>`
+
+    // Poem
+    parser = new Parser(ParagraphParseSetFactory.Poem);
+    text = `
+これは複数行をマージンで表現する。
+
+
+文末から２つでパラグラフになり、それ以降はマージンになる。
+
+
+
+こんな感じにね。
+
+　文頭にスペースを入れたら字下げできる。
+
+文末に改行が１行だけあれば同じパラグラフの中でbrが入る。
+こんな感じで。
+
+以上。
+`;
+    html = parser.parse(text)
+    document.body.innerHTML += `${html}<hr>`
+
 });
