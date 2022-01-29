@@ -27,7 +27,11 @@ window.addEventListener('load', (event) => {
     document.body.innerHTML += `${html}<hr>`
     document.body.innerHTML += `${parser.parse('改行が一切ない。')}<hr>`
     document.body.innerHTML += `${parser.parse('改行がひとつ。\nパラグラフなし。')}<hr>`
+    document.body.innerHTML += `${parser.parse('改行がふたつ。\nパラグラフなし。\n以上。')}<hr>`
     document.body.innerHTML += `${parser.parse('\n\n\n先頭と末尾に改行3つ。\n\n\n')}<hr>`
+    document.body.innerHTML += `${parser.parse('\n\n先頭と末尾と中間に改行2つ。\n\n以上。\n\n')}<hr>`
+    document.body.innerHTML += `${parser.parse('\n\n\n先頭と末尾と中間に改行3つ。\n\n\n以上。\n\n\n')}<hr>`
+    document.body.innerHTML += `${parser.parse('\n\n\n\n先頭と末尾と中間に改行4つ。\n\n\n\n以上。\n\n\n\n')}<hr>`
 
     // Poem
     parser = new Parser(ParagraphParseSetFactory.Poem);
@@ -55,6 +59,10 @@ window.addEventListener('load', (event) => {
     document.body.innerHTML += `${html}<hr>`
     document.body.innerHTML += `${parser.parse('改行が一切ない。')}<hr>`
     document.body.innerHTML += `${parser.parse('改行がひとつ。\nパラグラフなし。')}<hr>`
+    document.body.innerHTML += `${parser.parse('改行がふたつ。\nパラグラフなし。\n以上。')}<hr>`
     document.body.innerHTML += `${parser.parse('\n\n\n先頭と末尾に改行3つ。\n\n\n')}<hr>`
+    document.body.innerHTML += `${parser.parse('\n\n先頭と末尾と中間に改行2つ。\n\n以上。\n\n')}<hr>`
+    document.body.innerHTML += `${parser.parse('\n\n\n先頭と末尾と中間に改行3つ。\n\n\n以上。\n\n\n')}<hr>`
+    document.body.innerHTML += `${parser.parse('\n\n\n\n先頭と末尾と中間に改行4つ。\n\n\n\n以上。\n\n\n\n')}<hr>`
 
 });
