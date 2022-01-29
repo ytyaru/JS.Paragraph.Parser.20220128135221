@@ -26,7 +26,6 @@ class RegExpParseSet extends ParseSet {
         let parsed = text;
         console.log(this._input.RegExps)
         for (const regexp of this._input.RegExps) {
-//            parsed = this._output.parse(parsed, regexp)
             parsed = this._output.parse(parsed, regexp)
         }
         return parsed;
