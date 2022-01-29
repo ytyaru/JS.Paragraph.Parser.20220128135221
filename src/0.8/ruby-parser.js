@@ -117,7 +117,7 @@ class RubyLongNovelInput extends RubyOptionalInput { // 字種、字数、囲み
 }
 class RubyShortNovelInput extends RubyOptionalInput { // 
     constructor(options={}) {
-        const def = {rb: `${Chars.KANJI}${Chars.ALPHABET}${Chars.NUMBER}` };
+        const def = {rb: `${RegExpChars.KANJI}${RegExpChars.ALPHABET}${RegExpChars.NUMBER}` };
         let opt = { ...RubyOptionalInput.DefaultOptions, ...def, ...options };
         delete opt['begin'];
         super(new RegExp(`([${opt.rb}]{1,${opt.rbLen}}?)[${opt.encBegin}]([${opt.rt}]{1,${opt.rtLen}}?)[${opt.encEnd}]`, 'g'), opt);
