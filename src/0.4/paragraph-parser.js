@@ -38,9 +38,10 @@ class ParagraphMultilineMarginStyleOutput extends ParseOutput {
             for (; 0<=end; end--) {
 //                console.log(end, lines[end])
                 if ('' !== lines[end].trim()) { end++; break; } // if(end<lines.length)
+                //if ('' !== lines[end].trim()) { end++; break; } // if(end<lines.length)
             }
-        }
-//        console.log(begin, end)
+        } else { end = lines.length; }
+        console.log(begin, end)
 //        return lines.slice(begin, end);
         return lines.slice(begin, Math.max(end, 1));
     }
