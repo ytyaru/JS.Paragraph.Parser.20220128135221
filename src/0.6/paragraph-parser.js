@@ -81,7 +81,7 @@ class ParagraphMultilineOutput extends ParseOutput {
         }
         const psStrs = [];
         for (let p of ps) {
-            psStrs.push(this.parseParagrapsh(p.content, p.brLen));
+            psStrs.push(this.parseParagraph(p.content, p.brLen));
         }
         console.debug(psStrs.join(''))
         return psStrs.join('');
@@ -89,13 +89,19 @@ class ParagraphMultilineOutput extends ParseOutput {
 }
 class ParagraphMultilineBrOutput extends ParagraphMultilineOutput {
     constructor(func) { super(func); }
-    parseParagrapsh(content, brLen) {
+    parseParagraph(content, brLen) {
         return ElementString.get('p', content) + '<br>'.repeat(brLen);
     }
 }
+/*
+class ParagraphMultilineCssOutput extends ParagraphMultilineOutput {
+    constructor(func, css) { super(func); }
+
+}
+*/
 class ParagraphMultilineBlockEndStyleOutput extends ParagraphMultilineOutput {
     constructor(func) { super(func); }
-    parseParagrapsh(content, brLen, cssPropNamePrefix) { // cssPropNamePrefix: margin, padding, border
+    parseParagraph(content, brLen, cssPropNamePrefix) { // cssPropNamePrefix: margin, padding, border
         const attrStyleValue= (0 < brLen) ? '' : '';
         const attr = new Map();
         if (0 < brLen) { attr['style'] = `${cssPropNamePrefix}-block-end:${brLen}em`; }
@@ -104,19 +110,49 @@ class ParagraphMultilineBlockEndStyleOutput extends ParagraphMultilineOutput {
 }
 class ParagraphMultilinePaddingBlockEndStyleOutput extends ParagraphMultilineBlockEndStyleOutput {
     constructor(func) { super(func); }
-    parseParagrapsh(content, brLen) { return super.parseParagrapsh(content, brLen, 'padding'); }
+    parseParagraph(content, brLen) { return super.parseParagraph(content, brLen, 'padding'); }
 }
 class ParagraphMultilineMarginBlockEndStyleOutput extends ParagraphMultilineBlockEndStyleOutput {
     constructor(func) { super(func); }
-    parseParagrapsh(content, brLen) { return super.parseParagrapsh(content, brLen, 'margin'); }
+    parseParagraph(content, brLen) { return super.parseParagraph(content, brLen, 'margin'); }
 }
 class ParagraphMultilineBorderBlockEndStyleOutput extends ParagraphMultilineBlockEndStyleOutput {
     constructor(func) { super(func); }
-    parseParagrapsh(content, brLen) { return super.parseParagrapsh(content, brLen, 'border'); }
+    parseParagraph(content, brLen) { return super.parseParagraph(content, brLen, 'border'); }
 }
+class ParagraphMultilineMarginBlockEndClassOutput extends ParagraphMultilineOutput {
+    constructor(func) {
+        super(func);
+        this._id = 'style-paragraph-multiline-margin-class'; // <style>のid:w
+        this._style = new Style(this._id);
+    }
 
+    parseParagraph(content, brLen) {
+        const attrStyleValue= (0 < brLen) ? '' : '';
+        const attr = new Map();
+        if (0 < brLen) { attr['class'] = `p-margin-block-end-${brLen}`; }
+        // CSSを動的生成する
+        const css = `.p-margin-block-end-${brLen} { margin-block-end:${brLen}em; }\n`
+        this._style.add(css);
+        // HTML要素文字列を返す
+        return ElementString.get('p', content, attr);
+    }
+    /*
+    parse(text, regexp) {
+        // CSSを動的生成する必要がある
+        return text.replace(regexp, (match, text, br)=>{
+            return `<p class="p-new-line-${lineNum};">${text}</p>`;
+        });
+    }
+    */
+}
+/*
 class ParagraphMultilineMarginClassOutput extends ParseOutput {
-    constructor(func) { super(func); }
+    constructor(func) {
+        super(func);
+        this._id = 'style-paragraph-multiline-margin-class'; // <style>のid:w
+        this._style = new Style(this._id);
+    }
     parse(text, regexp) {
         // CSSを動的生成する必要がある
         return text.replace(regexp, (match, text, br)=>{
@@ -124,6 +160,10 @@ class ParagraphMultilineMarginClassOutput extends ParseOutput {
         });
     }
 }
+*/
+
+
+
 class ParagraphInput extends ParseInput {
     constructor() {
         super();
@@ -135,10 +175,12 @@ class ParagraphParseSetFactory {
     static #PoemMargin = new ParseSet(new ParagraphInput(), new ParagraphMultilineMarginBlockEndStyleOutput());
     static #PoemBorder = new ParseSet(new ParagraphInput(), new ParagraphMultilineBorderBlockEndStyleOutput());
     static #PoemPadding = new ParseSet(new ParagraphInput(), new ParagraphMultilinePaddingBlockEndStyleOutput());
+    static #PoemMarginClass = new ParseSet(new ParagraphInput(), new ParagraphMultilineMarginBlockEndClassOutput());
 
     static get Book() { return ParagraphParseSetFactory.#Book; } 
     static get PoemMargin () { return ParagraphParseSetFactory.#PoemMargin ; } 
     static get PoemBorder () { return ParagraphParseSetFactory.#PoemBorder ; } 
     static get PoemPadding () { return ParagraphParseSetFactory.#PoemPadding ; } 
+    static get PoemMarginClass() { return ParagraphParseSetFactory.#PoemMarginClass; } 
 }
 

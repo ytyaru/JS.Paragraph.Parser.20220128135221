@@ -39,6 +39,7 @@ window.addEventListener('load', (event) => {
     parser = new Parser(ParagraphParseSetFactory.PoemMargin );
 //    parser = new Parser(ParagraphParseSetFactory.PoemBorder);
 //    parser = new Parser(ParagraphParseSetFactory.PoemPadding);
+    parser = new Parser(ParagraphParseSetFactory.PoemMarginClass);
     text = `
 これは複数行をマージンで表現する。
 
