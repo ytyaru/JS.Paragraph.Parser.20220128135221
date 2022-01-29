@@ -22,16 +22,18 @@ class ParagraphMultilineMarginStyleOutput extends ParseOutput {
             }
         }
         // 末尾から連続した空白要素を削除する
-        let end=0;
+        let end=lines.length-1;
+        /*
         console.log(lines)
         console.log(lines[-1])
         console.log(lines.slice(-1))
         console.log(lines.slice(-1)[0]) // pythonならlines[-1]で取得できるのに…
         console.log(lines.slice(-1)[0].trim())
+        */
         if (0 < lines.length && '' === lines.slice(-1)[0].trim()) {
-            for (end=lines.length-1; 0<end; end--) {
+            for (; 0<=end; end--) {
 //                console.log(end, lines[end])
-                if ('' !== lines[end].trim()) { break; }
+                if ('' !== lines[end].trim()) { end++; break; }
             }
         }
         return lines.slice(begin, end);
@@ -42,10 +44,12 @@ class ParagraphMultilineMarginStyleOutput extends ParseOutput {
 
         // 先頭と末尾の空白は削除する
         lines = this.#trim(lines)
-
+        console.log(lines)
+        
         // パラグラフ化、br、マージン付与
         let ps = []
         for (let i=0; i<lines.length; i++) {
+            console.log(i, lines[i])
             if (0 < lines[i].trim().length) { // 非空白
                 let content = lines[i];
                 // 本行＝最終行
@@ -65,11 +69,14 @@ class ParagraphMultilineMarginStyleOutput extends ParseOutput {
                 // +1行目＝非空白（br）。その後も非空白が連続した文だけ<br>が入る。
                 else {
                     // 本パラグラフ内<br>
+                    console.log(content)
+                    const begin = i;
                     let b = i+1;
                     let brLen = 0;
                     while (b < lines.length && '' !== lines[b].trim()) { brLen++; b++; i++; }
                     //ps.push({content:lines.slice(i, b).join('<br>'), brLen:0});
-                    ps.push({content:lines.slice(i, b).map(span=>ElementString.get('span', span)).join('<br>'), brLen:0});
+                    ps.push({content:lines.slice(begin, b).map(span=>ElementString.get('span', span)).join('<br>'), brLen:0});
+                    console.log(lines.slice(begin, b))
                 }
             }
         }
