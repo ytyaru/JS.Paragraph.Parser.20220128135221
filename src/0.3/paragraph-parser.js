@@ -67,7 +67,7 @@ class ParagraphMultilineMarginStyleOutput extends ParseOutput {
                     // 本パラグラフ内<br>
                     let b = i+1;
                     let brLen = 0;
-                    while (b < lines.length && '' !== lines[b].trim()) { brLen++; }
+                    while (b < lines.length && '' !== lines[b].trim()) { brLen++; b++; i++; }
                     //ps.push({content:lines.slice(i, b).join('<br>'), brLen:0});
                     ps.push({content:lines.slice(i, b).map(span=>ElementString.get('span', span)).join('<br>'), brLen:0});
                 }
