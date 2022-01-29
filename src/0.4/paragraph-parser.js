@@ -4,12 +4,23 @@ class ParagraphOutput extends ParseOutput {
         // textの先頭と末尾にある連続した空白文字を削除する
         text = text.replace(/^[\r\n|\r|\n]{1,}/, '');
         text = text.replace(/[\r\n|\r|\n]{1,}$/, '');
+        console.log(text)
+        // textの中間にある2個以上連続した空白文字列を2個にする
+        text = text.replace(/([\r\n|\r|\n]{2,}?)/g, '\n\n');
+        console.log(text)
+        /*
+        text = text.replace(/([\r\n|\r|\n]{2,}?)/, (match, br)=> {
+            return     
+        });
+        */
 
         const ps = text.split(/\r\n\r\n|\r\r|\n\n/g);
         console.log(ps)
         let html = [];
         for (let p of ps) {
             const spans = p.split(/\r\n|\r|\n/g).filter(v => v); // 改行ごとに配列要素化し、空要素を削除する
+            console.log(spans)
+            if (spans.length < 1) { continue; }
             html.push((spans.length < 2) ? `<p>${spans[0]}</p>` : `<p>${spans.map(span=>ElementString.get('span', span)).join('<br>')}</p>`);
         }
         return html.join('');

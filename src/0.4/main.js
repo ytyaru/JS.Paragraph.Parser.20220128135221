@@ -32,6 +32,8 @@ window.addEventListener('load', (event) => {
     document.body.innerHTML += `${parser.parse('\n\n先頭と末尾と中間に改行2つ。\n\n以上。\n\n')}<hr>`
     document.body.innerHTML += `${parser.parse('\n\n\n先頭と末尾と中間に改行3つ。\n\n\n以上。\n\n\n')}<hr>`
     document.body.innerHTML += `${parser.parse('\n\n\n\n先頭と末尾と中間に改行4つ。\n\n\n\n以上。\n\n\n\n')}<hr>`
+    document.body.innerHTML += `${parser.parse('\n\n\n\n\n先頭と末尾と中間に改行5つ。\n\n\n\n\n以上。\n\n\n\n\n')}<hr>`
+    document.body.innerHTML += `${parser.parse('\n\n\n\n\n\n先頭と末尾と中間に改行6つ。\n\n\n\n\n\n以上。\n\n\n\n\n\n')}<hr>`
 
     // Poem
     parser = new Parser(ParagraphParseSetFactory.Poem);
@@ -64,5 +66,7 @@ window.addEventListener('load', (event) => {
     document.body.innerHTML += `${parser.parse('\n\n先頭と末尾と中間に改行2つ。\n\n以上。\n\n')}<hr>`
     document.body.innerHTML += `${parser.parse('\n\n\n先頭と末尾と中間に改行3つ。\n\n\n以上。\n\n\n')}<hr>`
     document.body.innerHTML += `${parser.parse('\n\n\n\n先頭と末尾と中間に改行4つ。\n\n\n\n以上。\n\n\n\n')}<hr>`
+    document.body.innerHTML += `${parser.parse('\n\n\n\n\n先頭と末尾と中間に改行5つ。\n\n\n\n\n以上。\n\n\n\n\n')}<hr>`
+    document.body.innerHTML += `${parser.parse('\n\n\n\n\n\n先頭と末尾と中間に改行6つ。\n\n\n\n\n\n以上。\n\n\n\n\n\n')}<hr>`
 
 });
