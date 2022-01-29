@@ -1,6 +1,6 @@
 class ParagraphOutput extends ParseOutput {
     constructor(func) { super(func); }
-    parse(text, regexp) {
+    parse(text) {
         // textの先頭と末尾にある連続した空白文字を削除する
         text = text.replace(/^[\r\n|\r|\n]{1,}/, '');
         text = text.replace(/[\r\n|\r|\n]{1,}$/, '');
@@ -38,7 +38,7 @@ class ParagraphMultilineOutput extends ParseOutput {
         return lines.slice(begin, Math.max(end, 1));
     }
     parseParagraph(content, brLen) { return ElementString.get('p', content) + '<br>'.repeat(brLen); }
-    parse(text, regexp) {
+    parse(text) {
         let lines = text.split(/\r\n|\r|\n/g);
         console.debug(lines)
 
@@ -147,20 +147,14 @@ class ParagraphMultilinePaddingBlockEndClassOutput extends ParagraphMultilineBlo
     constructor(func) { super(func, 'padding'); }
 }
 
-class ParagraphInput extends ParseInput {
-    constructor() {
-        super();
-        super.RegExps.push(new RegExp(/[\s\S]*/mu));
-    }
-}
 class ParagraphParseSetFactory {
-    static #Book = new ParseSet(new ParagraphInput(), new ParagraphOutput());
-    static #PoemMargin = new ParseSet(new ParagraphInput(), new ParagraphMultilineMarginBlockEndStyleOutput());
-    static #PoemBorder = new ParseSet(new ParagraphInput(), new ParagraphMultilineBorderBlockEndStyleOutput());
-    static #PoemPadding = new ParseSet(new ParagraphInput(), new ParagraphMultilinePaddingBlockEndStyleOutput());
-    static #PoemMarginClass = new ParseSet(new ParagraphInput(), new ParagraphMultilineMarginBlockEndClassOutput());
-    static #PoemBorderClass = new ParseSet(new ParagraphInput(), new ParagraphMultilineBorderBlockEndClassOutput());
-    static #PoemPaddingClass = new ParseSet(new ParagraphInput(), new ParagraphMultilinePaddingBlockEndClassOutput());
+    static #Book = new ParseSet(new ParagraphOutput());
+    static #PoemMargin = new ParseSet(new ParagraphMultilineMarginBlockEndStyleOutput());
+    static #PoemBorder = new ParseSet(new ParagraphMultilineBorderBlockEndStyleOutput());
+    static #PoemPadding = new ParseSet(new ParagraphMultilinePaddingBlockEndStyleOutput());
+    static #PoemMarginClass = new ParseSet(new ParagraphMultilineMarginBlockEndClassOutput());
+    static #PoemBorderClass = new ParseSet(new ParagraphMultilineBorderBlockEndClassOutput());
+    static #PoemPaddingClass = new ParseSet(new ParagraphMultilinePaddingBlockEndClassOutput());
 
     static get Book() { return ParagraphParseSetFactory.#Book; } 
     static get PoemMargin () { return ParagraphParseSetFactory.#PoemMargin ; } 

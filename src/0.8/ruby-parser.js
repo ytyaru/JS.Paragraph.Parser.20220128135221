@@ -1,4 +1,4 @@
-class RubyOutput extends ParseOutput {
+class RubyOutput extends RegExpParseOutput {
     constructor(func) { super(func); }
     parse(text, regexp) {
         return text.replace(regexp, (match, rb, rt)=>{
@@ -6,7 +6,7 @@ class RubyOutput extends ParseOutput {
         });
     }
 }
-class RubyFullParameterOutput extends ParseOutput {
+class RubyFullParameterOutput extends RegExpParseOutput {
     constructor(func) { super(func); }
     parse(text, regexp) {
         return text.replace(regexp, (match, rb, rt, offset, string, groups)=>{
@@ -57,7 +57,7 @@ class RubyShortToLongNovelOutput extends RubyFullParameterOutput { // 短縮形�
     }
 }
 
-class RubyNovelInput extends ParseInput {
+class RubyNovelInput extends RegExpParseInput {
     constructor(short={}, long={}) {
         super();
         this._long = (long) ? new RubyLongNovelInput(long) : null;
@@ -88,7 +88,7 @@ class RubyHamelnInput extends RubyNovelInput {
     constructor() {super(null, {begin:'|', encBegin:'《', encEnd:'》'})}
     get RegExps() { return super.RegExps; }
 }
-class RubyOptionalInput extends ParseInput {
+class RubyOptionalInput extends RegExpParseInput {
     static #DEFAULT_OPTIONS = {
         begin: '|｜',
         rb: '^\n',
@@ -125,7 +125,7 @@ class RubyShortNovelInput extends RubyOptionalInput { //
     get Options() { return super.Options; }
     get RegExps() { return super.RegExps; }
 }
-class RubyDendenInput extends ParseInput { 
+class RubyDendenInput extends RegExpParseInput { 
     constructor(options={}) {
         super();
         super.RegExps.push(new RegExp(`\{([^\\n]{1,}?)[\|]([^\\n]{1,}?)\}`, 'g'));
@@ -133,7 +133,7 @@ class RubyDendenInput extends ParseInput {
     get Options() { return super.Options; }
     get RegExps() { return super.RegExps; }
 }
-class RubyAlphaPoliceInput extends ParseInput {
+class RubyAlphaPoliceInput extends RegExpParseInput {
     constructor(options={}) {
         super();
         super.RegExps.push(new RegExp(`#([^\\n]{1,}?)__([^\\n]{1,}?)__#`, 'g'));
@@ -143,51 +143,51 @@ class RubyAlphaPoliceInput extends ParseInput {
 }
 
 class RubyParseSetFactory {
-    static #RootHtml = new ParseSet(new RubyRootInput(), new RubyHtmlOutput());               // ｛｝→<ruby>
-    static #RootNovel = new ParseSet(new RubyRootInput(), new RubyLongNovelOutput());         // ｛｝→｜《》
-    static #NovelHtml = new ParseSet(new RubyNovelInput(), new RubyHtmlOutput());             // ｜《》→<ruby>
+    static #RootHtml = new RegExpParseSet(new RubyRootInput(), new RubyHtmlOutput());               // ｛｝→<ruby>
+    static #RootNovel = new RegExpParseSet(new RubyRootInput(), new RubyLongNovelOutput());         // ｛｝→｜《》
+    static #NovelHtml = new RegExpParseSet(new RubyNovelInput(), new RubyHtmlOutput());             // ｜《》→<ruby>
 
     // 青空文庫→｜｛｝
-    static #AozoraNovel = [new ParseSet(new RubyLongNovelInput({encBegin:'《', encEnd:'》'}), new RubyLongNovelOutput()),
-                           new ParseSet(new RubyShortNovelInput({encBegin:'《', encEnd:'》'}), new RubyShortToLongNovelOutput())];
-    static #AozoraHtml = [new ParseSet(new RubyLongNovelInput({encBegin:'《', encEnd:'》'}), new RubyHtmlOutput()),
-                           new ParseSet(new RubyShortNovelInput({encBegin:'《', encEnd:'》'}), new RubyHtmlOutput())];
+    static #AozoraNovel = [new RegExpParseSet(new RubyLongNovelInput({encBegin:'《', encEnd:'》'}), new RubyLongNovelOutput()),
+                           new RegExpParseSet(new RubyShortNovelInput({encBegin:'《', encEnd:'》'}), new RubyShortToLongNovelOutput())];
+    static #AozoraHtml = [new RegExpParseSet(new RubyLongNovelInput({encBegin:'《', encEnd:'》'}), new RubyHtmlOutput()),
+                           new RegExpParseSet(new RubyShortNovelInput({encBegin:'《', encEnd:'》'}), new RubyHtmlOutput())];
     // カクヨム→｜《》
     static #KakuyomuNovel = RubyParseSetFactory.#AozoraNovel;
     static #KakuyomuHtml = RubyParseSetFactory.#AozoraHtml;
-    static #NarouNovel = new ParseSet(new RubyNarouInput(), new RubyLongNovelOutput());       // なろう→｜《》
-    static #NarouHtml = new ParseSet(new RubyNarouInput(), new RubyHtmlOutput());             // なろう→HTML
-    static #HamelnNovel = new ParseSet(new RubyHamelnInput(), new RubyLongNovelOutput());     // ハーメルン→｜《》
-    static #HamelnHtml = new ParseSet(new RubyHamelnInput(), new RubyHtmlOutput());           // ハーメルン→HTML
-    static #AlphaPoliceNovel = new ParseSet(new RubyAlphaPoliceInput(), new RubyLongNovelOutput()); // アルファポリス→｜《》
-    static #AlphaPoliceHtml = new ParseSet(new RubyAlphaPoliceInput(), new RubyHtmlOutput());       // アルファポリス→HTML
-    static #DendenNovel = [new ParseSet(new RubyDendenInput(), new RubyDendenOutput()),
-                           new ParseSet(new RubyDendenInput(), new RubyLongNovelOutput())];     // でんでん→｜《》
-    static #DendenHtml = [new ParseSet(new RubyDendenInput(), new RubyDendenOutput()),
-                          new ParseSet(new RubyDendenInput(), new RubyHtmlOutput())];           // でんでん→HTML
+    static #NarouNovel = new RegExpParseSet(new RubyNarouInput(), new RubyLongNovelOutput());       // なろう→｜《》
+    static #NarouHtml = new RegExpParseSet(new RubyNarouInput(), new RubyHtmlOutput());             // なろう→HTML
+    static #HamelnNovel = new RegExpParseSet(new RubyHamelnInput(), new RubyLongNovelOutput());     // ハーメルン→｜《》
+    static #HamelnHtml = new RegExpParseSet(new RubyHamelnInput(), new RubyHtmlOutput());           // ハーメルン→HTML
+    static #AlphaPoliceNovel = new RegExpParseSet(new RubyAlphaPoliceInput(), new RubyLongNovelOutput()); // アルファポリス→｜《》
+    static #AlphaPoliceHtml = new RegExpParseSet(new RubyAlphaPoliceInput(), new RubyHtmlOutput());       // アルファポリス→HTML
+    static #DendenNovel = [new RegExpParseSet(new RubyDendenInput(), new RubyDendenOutput()),
+                           new RegExpParseSet(new RubyDendenInput(), new RubyLongNovelOutput())];     // でんでん→｜《》
+    static #DendenHtml = [new RegExpParseSet(new RubyDendenInput(), new RubyDendenOutput()),
+                          new RegExpParseSet(new RubyDendenInput(), new RubyHtmlOutput())];           // でんでん→HTML
 
-    static #NovelAlphaPolice = new ParseSet(new RubyNovelInput(), new RubyAlphaPoliceOutput()); // ｜《》→アルファポリス
-    static #NovelDenden = new ParseSet(new RubyNovelInput(), new RubyDendenOutput());           // ｜《》→でんでん
+    static #NovelAlphaPolice = new RegExpParseSet(new RubyNovelInput(), new RubyAlphaPoliceOutput()); // ｜《》→アルファポリス
+    static #NovelDenden = new RegExpParseSet(new RubyNovelInput(), new RubyDendenOutput());           // ｜《》→でんでん
 
-    static get RootHtml() { return RubyParseSetFactory.#RootHtml; } 
-    static get RootNovel() { return RubyParseSetFactory.#RootNovel; } 
-    static get NovelHtml() { return RubyParseSetFactory.#NovelHtml; } 
+    static get RootHtml() { return RubyRegExpParseSetFactory.#RootHtml; } 
+    static get RootNovel() { return RubyRegExpParseSetFactory.#RootNovel; } 
+    static get NovelHtml() { return RubyRegExpParseSetFactory.#NovelHtml; } 
 
-    static get AozoraNovel() { return RubyParseSetFactory.#AozoraNovel; } 
-    static get AozoraHtml() { return RubyParseSetFactory.#AozoraHtml; } 
-    static get KakuyomuNovel () { return RubyParseSetFactory.#KakuyomuNovel ; } 
-    static get KakuyomuHtml() { return RubyParseSetFactory.#KakuyomuHtml; } 
-    static get NarouNovel () { return RubyParseSetFactory.#NarouNovel ; } 
-    static get NarouHtml() { return RubyParseSetFactory.#NarouHtml; } 
-    static get HamelnNovel () { return RubyParseSetFactory.#HamelnNovel ; } 
-    static get HamelnHtml() { return RubyParseSetFactory.#HamelnHtml; } 
-    static get AlphaPoliceNovel () { return RubyParseSetFactory.#AlphaPoliceNovel ; } 
-    static get AlphaPoliceHtml() { return RubyParseSetFactory.#AlphaPoliceHtml; } 
-    static get DendenNovel () { return RubyParseSetFactory.#DendenNovel ; } 
-    static get DendenHtml() { return RubyParseSetFactory.#DendenHtml; }
+    static get AozoraNovel() { return RubyRegExpParseSetFactory.#AozoraNovel; } 
+    static get AozoraHtml() { return RubyRegExpParseSetFactory.#AozoraHtml; } 
+    static get KakuyomuNovel () { return RubyRegExpParseSetFactory.#KakuyomuNovel ; } 
+    static get KakuyomuHtml() { return RubyRegExpParseSetFactory.#KakuyomuHtml; } 
+    static get NarouNovel () { return RubyRegExpParseSetFactory.#NarouNovel ; } 
+    static get NarouHtml() { return RubyRegExpParseSetFactory.#NarouHtml; } 
+    static get HamelnNovel () { return RubyRegExpParseSetFactory.#HamelnNovel ; } 
+    static get HamelnHtml() { return RubyRegExpParseSetFactory.#HamelnHtml; } 
+    static get AlphaPoliceNovel () { return RubyRegExpParseSetFactory.#AlphaPoliceNovel ; } 
+    static get AlphaPoliceHtml() { return RubyRegExpParseSetFactory.#AlphaPoliceHtml; } 
+    static get DendenNovel () { return RubyRegExpParseSetFactory.#DendenNovel ; } 
+    static get DendenHtml() { return RubyRegExpParseSetFactory.#DendenHtml; }
 
-    static get NovelAlphaPolice () { return RubyParseSetFactory.#NovelAlphaPolice; } 
-    static get NovelDenden () { return RubyParseSetFactory.#NovelDenden ; } 
+    static get NovelAlphaPolice () { return RubyRegExpParseSetFactory.#NovelAlphaPolice; } 
+    static get NovelDenden () { return RubyRegExpParseSetFactory.#NovelDenden ; } 
 
 }
 
