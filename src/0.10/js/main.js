@@ -183,7 +183,8 @@ window.addEventListener('load', (event) => {
     }
     testEm();
     function test1() {
-        let parser = new Parser(ParagraphParseSetFactory.Book, RubyParseSetFactory.RootHtml, EmParseSetFactory.Normal);
+        //let parser = new Parser(ParagraphParseSetFactory.Book, RubyParseSetFactory.RootHtml, EmParseSetFactory.Normal);
+        let parser = new Parser(ParseSetFactory.Novel);
         let text = `
 　中間書式｛ちゅうかんしょしき｝の｜総合テスト｛トータル試験｝です。
 
