@@ -3,6 +3,7 @@ class ParseSet { // パース手続きのセット
         this._output = output; // ParseOutput型
     }
     parse(text) { return this._output.parse(text); }
+    clear() { this._output.clear(); }
 }
 class RegExpParseSet extends ParseSet {
     constructor(input, output) { // RegExpセット, 出力メソッド
@@ -17,14 +18,17 @@ class RegExpParseSet extends ParseSet {
         }
         return parsed;
     }
+    clear() { super.clear(); }
 }
 class ParseOutput {
     constructor(func) { this._func = func; }
     parse(text) { return this._func(text); }
+    clear() {}
 }
 class RegExpParseOutput extends ParseOutput {
     constructor(func) { super(func); }
     parse(text, regexp) { return text.replace(regexp, (match, p1)=>{return super.parse(p1);}) }
+    clear() { super.clear(); }
 }
 class ParseInput {}
 class RegExpParseInput extends ParseInput {

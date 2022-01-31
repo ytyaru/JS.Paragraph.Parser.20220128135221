@@ -7,6 +7,7 @@ class Parser {
         let parsed = text;
         for (const parseSet of this._parseSets) {
             parsed = parseSet.parse(parsed);
+            parseSet.clear();
         }
         return parsed;
     }

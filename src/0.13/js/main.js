@@ -215,6 +215,28 @@ window.addEventListener('load', (event) => {
 
 ＃＃＃＃＃＃＃これは見出しになりません。レベル６までです
 
+# 名前重複1
+
+# 名前重複1
+
+# 名前重複1
+
+# 名前重複1
+
+# 名前重複1
+
+＃名前重複１
+
+＃名前重複１
+
+＃名前重複１
+
+＃名前重複１
+
+＃名前重複１
+
+＃名前重複１
+
 `;
         let html = parser.parse(text)
         document.body.innerHTML += `<p>${text}</p><p>${html}</p><hr>`
