@@ -44,7 +44,7 @@ class RegExpChars { // 正規表現で使用する字種パターン
         const N = (isNumber) ? RegExpChars.#HALF_NUMBER : '';
         const S = (isSymbol) ? '!-~' : '';
         let regexp = new RegExp(`[${A}${N}${S}]`, 'g');
-        console.log(regexp);
+        //console.debug(regexp);
         let v = str.replace(regexp, (s)=>{
             return String.fromCharCode(s.charCodeAt(0) + 0xFEE0);
         });
@@ -56,7 +56,7 @@ class RegExpChars { // 正規表現で使用する字種パターン
                  .replace(/ /g, '　')
                  .replace(/~/g, '〜');
         }
-        console.debug(str, v);
+        //console.debug(str, v);
         return v;
     }
     static toHalf(str, isAlphabet=true, isNumber=true, isSymbol=true) {

@@ -254,7 +254,7 @@ window.addEventListener('load', (event) => {
 
     function testSpanUpRight() {
         let parser = new Parser(SpanUpRightParseSetFactory.Half4);
-        let text = '2022年12月31日。123年1月1日。1234567890円也。\n２０２２年１２月３１日。１２３年１月１日。１２３４５６７８９０円也。π＝３．１４。A。Ａ。AB。ＡＢ。ABC。ＡＢＣ。HTML。ＨＴＭＬ。ABCDEFG。ＡＢＣＤＥＦＧ。「! ！ ? ？ !?！？1!２！……――、。＄％＆〜：＜＞」'
+        let text = '2022年12月31日。123年1月1日。1234567890円也。\n２０２２年１２月３１日。１２３年１月１日。１２３４５６７８９０円也。π＝３．１４。+π+＝３．１４。＋π＋＝３．１４。A。Ａ。AB。ＡＢ。ABC。ＡＢＣ。HTML。ＨＴＭＬ。ABCDEFG。ＡＢＣＤＥＦＧ。「! ！ ? ？ !?！？1!２！……――、。＄％＆〜：＜＞」'
         let html = parser.parse(text)
         document.body.innerHTML += `<h1>縦中横テスト</h1><p>${text}</p><hr>`;
         document.body.innerHTML += `<h3>Half4</h3><div style="writing-mode:vertical-rl">${html}</div><hr>`
@@ -265,7 +265,7 @@ window.addEventListener('load', (event) => {
 
         parser = new Parser(SpanUpRightParseSetFactory.Wide4);
         html = parser.parse(text)
-        document.body.innerHTML += `<h3>Wide4</h3><p>${text}</p><div style="writing-mode:vertical-rl">${html}</div><hr>`
+        document.body.innerHTML += `<h3>Wide4</h3><div style="writing-mode:vertical-rl">${html}</div><hr>`
 
         parser = new Parser(SpanUpRightParseSetFactory.Wide2);
         html = parser.parse(text)
