@@ -22,13 +22,15 @@ class HeadingOutput extends RegExpParseOutput {
     }
 
 }
-class AnchorHeadingOutput extends RegExpParseOutput {
+class NamedAnchorHeadingOutput extends RegExpParseOutput {
     constructor() {
         super((match, meta, content)=>{
             console.log('meta:', meta)
             console.log('content:', content)
             const level = Math.max(...(['#','＃'].map(m=>(meta.match(new RegExp(`${m}`, 'g')) || []).length)))
-            return (level < 7) ? ElementString.get(`h${level}`, content) : match;
+            const attrs = new Map();
+            attrs['id'] = encodeURI(content)
+            return (level < 7) ? ElementString.get(`h${level}`, content, attrs) : match;
         });
     }
     parse(text, regexp) {
@@ -39,6 +41,7 @@ class AnchorHeadingOutput extends RegExpParseOutput {
 
 }
 class HeadingParseSetFactory {
-    static #Normal = new RegExpParseSet(new HeadingInput(), new HeadingOutput());
+    //static #Normal = new RegExpParseSet(new HeadingInput(), new HeadingOutput());
+    static #Normal = new RegExpParseSet(new HeadingInput(), new NamedAnchorHeadingOutput());
     static get Normal() { return HeadingParseSetFactory.#Normal; } 
 }
