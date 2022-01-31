@@ -1,6 +1,6 @@
 class ParseSetFactory {
     static #Novel = [
-        HeadingParseSetFactory.Normal, 
+        HeadingParseSetFactory.Named, 
         ParagraphParseSetFactory.Book, 
         RubyParseSetFactory.RootHtml, 
         EmParseSetFactory.Normal

@@ -7,34 +7,44 @@ class HeadingInput extends RegExpParseInput { // <hX>見出し</hX>  ＃見出�
     get RegExps() { return super.RegExps; }
 }
 class HeadingOutput extends RegExpParseOutput {
-    constructor() {
-        super((match, meta, content)=>{
-            console.debug('meta:', meta)
-            console.debug('content:', content)
-            const level = Math.max(...(['#','＃'].map(m=>(meta.match(new RegExp(`${m}`, 'g')) || []).length)))
-            return (level < 7) ? ElementString.get(`h${level}`, content) : match;
-        });
-    }
+    constructor(func) { super(func); }
+    getLevel(meta) { return Math.max(...(['#','＃'].map(m=>(meta.match(new RegExp(`${m}`, 'g')) || []).length))); }
     parse(text, regexp) {
         return text.replace(regexp, (match, meta, content, offset, string, groups)=>{
-            return this._func(match, meta, content);
+            const level = this.getLevel(meta);
+            return (level < 7) ? this._func(level, content.trim()) : match;
         });
     }
 }
-class NamedAnchorHeadingOutput extends RegExpParseOutput { // 名前ID付き見出し
+class SimpleHeadingOutput extends HeadingOutput { // 単純な見出し
     constructor() {
-        super((match, meta, content)=>{
-            console.debug('meta:', meta)
-            console.debug('content:', content)
-            content = content.trim();
-            const level = Math.max(...(['#','＃'].map(m=>(meta.match(new RegExp(`${m}`, 'g')) || []).length)))
-            return (level < 7) ? ElementString.get(`h${level}`, content, this._makeAttrs(content)) : match;
-        });
+        super((level, content)=>{ return ElementString.get(`h${level}`, content); });
+    }
+}
+class NumberedAnchorHeadingOutput extends HeadingOutput { // 番号ID付き見出し
+    constructor() {
+        super((level, content)=>{return ElementString.get(`h${level}`, content, this._makeAttrs());});
+        this._count = 0;
+    }
+    _makeAttrs() {
+        const attrs = new Map();
+        attrs['id'] = this._makeId();
+        return attrs;
+    }
+    _makeId() { // 連番
+        this._count++;
+        return `heading-${this._count}`;
+    }
+    clear() { super.clear(); this._count = 0; }
+}
+class NamedAnchorHeadingOutput extends HeadingOutput { // 名前ID付き見出し
+    constructor() {
+        super((level, content)=>{return ElementString.get(`h${level}`, content, this._makeAttrs(content));});
         this._ids = [];
     }
     _makeAttrs(content) {
         const attrs = new Map();
-        attrs['id'] = this._makeId(content)
+        attrs['id'] = this._makeId(content);
         return attrs;
     }
     _makeId(content) {// 重複回避ID作成
@@ -48,38 +58,14 @@ class NamedAnchorHeadingOutput extends RegExpParseOutput { // 名前ID付き見�
         this._ids.push(`${id}${suffix}`);
         return `${id}${suffix}`;
     }
-    parse(text, regexp) {
-        return text.replace(regexp, (match, meta, content, offset, string, groups)=>{
-            return this._func(match, meta, content);
-        });
-    }
     clear() { super.clear(); this._ids = null; this._ids = []; }
 }
-class NumberedAnchorHeadingOutput extends RegExpParseOutput { // 番号ID付き見出し
-    constructor() {
-        super((match, meta, content)=>{
-            console.debug('meta:', meta)
-            console.debug('content:', content)
-            const level = Math.max(...(['#','＃'].map(m=>(meta.match(new RegExp(`${m}`, 'g')) || []).length)))
-            if (level < 7) {
-                this._count++;
-                const attrs = new Map();
-                attrs['id'] = `heading-${this._count}`;
-                return ElementString.get(`h${level}`, content, attrs);
-            } else { return match; }
-        });
-        this._count = 0;
-    }
-    parse(text, regexp) {
-        return text.replace(regexp, (match, meta, content, offset, string, groups)=>{
-            return this._func(match, meta, content);
-        });
-    }
-
-}
 class HeadingParseSetFactory {
-    //static #Normal = new RegExpParseSet(new HeadingInput(), new HeadingOutput());
-    static #Normal = new RegExpParseSet(new HeadingInput(), new NamedAnchorHeadingOutput());
-    //static #Normal = new RegExpParseSet(new HeadingInput(), new NumberedAnchorHeadingOutput());
-    static get Normal() { return HeadingParseSetFactory.#Normal; } 
+    static #Simple = new RegExpParseSet(new HeadingInput(), new SimpleHeadingOutput());
+    static #Numbered = new RegExpParseSet(new HeadingInput(), new NumberedAnchorHeadingOutput());
+    static #Named = new RegExpParseSet(new HeadingInput(), new NamedAnchorHeadingOutput());
+
+    static get Simple() { return HeadingParseSetFactory.#Simple; } 
+    static get Numbered() { return HeadingParseSetFactory.#Numbered; } 
+    static get Named() { return HeadingParseSetFactory.#Named; } 
 }

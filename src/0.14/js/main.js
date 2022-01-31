@@ -187,7 +187,7 @@ window.addEventListener('load', (event) => {
     testEm();
 
     function testHeading() {
-        let parser = new Parser(HeadingParseSetFactory.Normal);
+        let parser = new Parser(HeadingParseSetFactory.Simple);
         let text = `# これは見出し1です
 ## これも見出し2です
 
@@ -239,7 +239,16 @@ window.addEventListener('load', (event) => {
 
 `;
         let html = parser.parse(text)
-        document.body.innerHTML += `<p>${text}</p><p>${html}</p><hr>`
+        document.body.innerHTML += `<p>${text}</p>${html}<hr>`
+
+        console.log(HeadingParseSetFactory.Numbered)
+        parser = new Parser(HeadingParseSetFactory.Numbered);
+        html = parser.parse(text);
+        document.body.innerHTML += `${html}<hr>`
+
+        parser = new Parser(HeadingParseSetFactory.Named);
+        html = parser.parse(text);
+        document.body.innerHTML += `${html}<hr>`
     }
     testHeading();
 
