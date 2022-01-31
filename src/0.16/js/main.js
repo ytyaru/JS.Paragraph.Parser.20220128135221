@@ -253,23 +253,45 @@ window.addEventListener('load', (event) => {
     testHeading();
 
     function testSpanUpRight() {
-        let parser = new Parser(SpanUpRightParseSetFactory.Wide4);
-        let text = '2022年12月31日。123年1月1日。1234567890円也。'
+
+        let parser = new Parser(SpanUpRightParseSetFactory.Half4);
+        let text = '2022年12月31日。123年1月1日。1234567890円也。\n２０２２年１２月３１日。１２３年１月１日。１２３４５６７８９０円也。π＝３．１４。A。Ａ。AB。ＡＢ。ABC。ＡＢＣ。HTML。ＨＴＭＬ。ABCDEFG。ＡＢＣＤＥＦＧ。'
         let html = parser.parse(text)
-        document.body.innerHTML += `<p>${text}</p><div style="writing-mode:vertical-rl">${html}</div><hr>`
+        document.body.innerHTML += `<h1>縦中横テスト</h1><p>${text}</p><hr>`;
+        document.body.innerHTML += `<h3>Half4</h3><div style="writing-mode:vertical-rl">${html}</div><hr>`
+
+        parser = new Parser(SpanUpRightParseSetFactory.Half2);
+        html = parser.parse(text)
+        document.body.innerHTML += `<h3>Half2</h3><div style="writing-mode:vertical-rl">${html}</div><hr>`
+
+        parser = new Parser(SpanUpRightParseSetFactory.Wide4);
+        html = parser.parse(text)
+        document.body.innerHTML += `<h3>Wide4</h3><p>${text}</p><div style="writing-mode:vertical-rl">${html}</div><hr>`
 
         parser = new Parser(SpanUpRightParseSetFactory.Wide2);
         html = parser.parse(text)
-        document.body.innerHTML += `<div style="writing-mode:vertical-rl">${html}</div><hr>`
+        document.body.innerHTML += `<h3>Wide2</h3><div style="writing-mode:vertical-rl">${html}</div><hr>`
 
         parser = new Parser(SpanUpRightParseSetFactory.As4);
         html = parser.parse(text)
-        document.body.innerHTML += `<div style="writing-mode:vertical-rl">${html}</div><hr>`
+        document.body.innerHTML += `<h3>As4</h3><div style="writing-mode:vertical-rl">${html}</div><hr>`
 
         parser = new Parser(SpanUpRightParseSetFactory.As2);
         html = parser.parse(text)
-        document.body.innerHTML += `<div style="writing-mode:vertical-rl">${html}</div><hr>`
+        document.body.innerHTML += `<h3>As2</h3><div style="writing-mode:vertical-rl">${html}</div><hr>`
     }
+    console.assert(RegExpChars.toWide('0') === '０');
+    console.assert(RegExpChars.toWide('9') === '９');
+    console.assert(RegExpChars.toWide('A') === 'Ａ');
+    console.assert(RegExpChars.toWide('Z') === 'Ｚ');
+    console.assert(RegExpChars.toWide('a') === 'ａ');
+    console.assert(RegExpChars.toWide('z') === 'ｚ');
+    console.assert(RegExpChars.toWide('０') === '０');
+    console.assert(RegExpChars.toWide('９') === '９');
+    console.assert(RegExpChars.toWide('Ａ') === 'Ａ');
+    console.assert(RegExpChars.toWide('Ｚ') === 'Ｚ');
+    console.assert(RegExpChars.toWide('ａ') === 'ａ');
+    console.assert(RegExpChars.toWide('ｚ') === 'ｚ');
     testSpanUpRight();
 
     function test1() {

@@ -39,11 +39,12 @@ class RegExpChars { // 正規表現で使用する字種パターン
     static get HALF_ALPHABET () { return RegExpChars .#HALF_ALPHABET ; }
     static get WIDE_ALPHABET () { return RegExpChars .#WIDE_ALPHABET ; }
 
-    static toWide(str, isAlphabet=true, isNumber=true, isSymbol) { // 英数字記号を全角にする（記号は対象外）
+    static toWide(str, isAlphabet=true, isNumber=true, isSymbol=true) { // 英数字記号を全角にする（記号は対象外）
         const A = (isAlphabet) ? RegExpChars.#HALF_ALPHABET : '';
         const N = (isNumber) ? RegExpChars.#HALF_NUMBER : '';
         const S = (isSymbol) ? '!-~' : '';
-        let regexp = new RegExp('[${A}${N}${S}]', 'g');
+        let regexp = new RegExp(`[${A}${N}${S}]`, 'g');
+        console.log(regexp);
         let v = str.replace(regexp, (s)=>{
         //let v = str.replace(/[!-~]/g, (s)=>{
             return String.fromCharCode(s.charCodeAt(0) + 0xFEE0);
@@ -57,12 +58,14 @@ class RegExpChars { // 正規表現で使用する字種パターン
                  .replace(/ /g, '　')
                  .replace(/~/g, '〜');
         }
+        console.debug(str, v);
         return v;
     }
-    static toHalf(str, isAlphabet=true, isNumber=true, isSymbol) {
+    static toHalf(str, isAlphabet=true, isNumber=true, isSymbol=true) {
         const A = (isAlphabet) ? RegExpChars.#WIDE_ALPHABET : '';
         const N = (isNumber) ? RegExpChars.#WIDE_NUMBER : '';
         const S = (isSymbol) ? '！-～' : '';
+        let regexp = new RegExp(`[${A}${N}${S}]`, 'g');
         let v = str.replace(regexp, (s)=>{
         //let v = str.replace(/[！-～]/g, (s)=>{
             return String.fromCharCode(s.charCodeAt(0) - 0xFEE0);
