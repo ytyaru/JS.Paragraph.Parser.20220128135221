@@ -2,13 +2,16 @@ class ParagraphOutput extends ParseOutput {
     constructor(func) { super(func); }
     parse(text) {
         // textの先頭と末尾にある連続した空白文字を削除する
-        text = text.replace(/^[\r\n|\r|\n]{1,}/, '');
-        text = text.replace(/[\r\n|\r|\n]{1,}$/, '');
+        //text = text.replace(/^[\r\n|\r|\n]{1,}/, '');
+        //text = text.replace(/[\r\n|\r|\n]{1,}$/, '');
+        text = text.trim();
         console.debug(text)
         // 2つの改行単位で区切る
         let ps = text.split(/\r\n\r\n|\r\r|\n\n/g);
         //ps = ps.filter(v => !v.startsWith('<h')); // h1〜h6を対象外とする
         console.debug(ps)
+        //ps = ps.filter(p=> !p.startsWith('<h'))
+        //console.debug(ps)
         let html = [];
         for (let p of ps) {
             let spans = p.split(/\r\n|\r|\n/g).filter(v => v); // 改行ごとに配列要素化し、空要素を削除する

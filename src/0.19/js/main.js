@@ -315,6 +315,7 @@ window.addEventListener('load', (event) => {
     function test1() {
         let parser = new Parser();
         let text = `＃総合｛そうごう｝｜＊試験＊｛テスト｝
+
 　中間書式｛ちゅうかんしょしき｝の｜総合テスト｛トータル試験｝です。
 
 ## 試験｛＊しけん＊｝
@@ -327,7 +328,7 @@ window.addEventListener('load', (event) => {
 
 　２の挙動は＊予想外＊でした。期待値はルビの上にベース文字数分だけ強調マークがつくと思っていたのですが……。ブラウザによって挙動が変わるかもしれません。詳細は未調査。`;
         let html = parser.parse(text)
-        document.body.innerHTML += `<p>${text}</p><p>${html}</p><hr>`
+        document.body.innerHTML += `<p>${text}</p>${html}<hr>`
         
         text = '2022年12月31日。+2022+年+12+月+31+日。｜+2022+｛令和４｝年+12+月+31+日。｜+2022+｛＊令和４＊｝年+12+月+31+日。２０２２年１２月３１日。\nπ+π+｜+π+｛パイ｝。｜+π+｛＊パイ＊｝\nA。AB。ABC。ABCD。ABCDE。ABCDEFG。Ａ。ＡＢ。ＡＢＣ。ＡＢＣＤ。ＡＢＣＤＥ。ＡＢＣＤＥＦＧ。'
         html = parser.parse(text)
