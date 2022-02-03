@@ -62,14 +62,19 @@ class SpanUpRightOutput extends ParseOutput {
     get Style() { return this._style; }
 }
 class AutoSpanUpRightOutput extends SpanUpRightOutput {
-    constructor(chars=RegExpChars.NUMBER, digits=4, halfWide=-1) { // 縦中横の最大桁数、英数字をそのまま／半角／全角にする
+    constructor(chars=RegExpChars.NUMBER, min=1, max=4, halfWide=-1) { // 縦中横の最大桁数、英数字をそのまま／半角／全角にする
+    //constructor(chars=RegExpChars.NUMBER, digits=4, halfWide=-1) { // 縦中横の最大桁数、英数字をそのまま／半角／全角にする
         super((content)=>{return ElementString.get('span', this._makeContent(content), this._makeAttrs());});
         this._chars = chars;
-        this._digits = digits;
+        this._min = min;
+        this._max = max;
+        //this._digits = digits;
         this._halfWide = halfWide;
     }
     parse(text) {
-        const regexp = new RegExp(`([${this._chars}}]{1,${this._digits}})`, 'g');
+        //const regexp = new RegExp(`([${this._chars}}]{1,${this._digits}})`, 'g');
+        console.log(this._min, this._max)
+        const regexp = new RegExp(`([${this._chars}}]{${this._min},${this._max}})`, 'g');
         return text.replace(regexp, (match, content, offset, string, groups)=>{
             return this._func(content);
         });
@@ -77,13 +82,17 @@ class AutoSpanUpRightOutput extends SpanUpRightOutput {
     get Style() { return this._style; }
 }
 class MarkSpanUpRightOutput extends SpanUpRightOutput { // +縦中横+
-    constructor(digits=4, halfWide=-1) { // 縦中横の最大桁数、英数字をそのまま／半角／全角にする
+    constructor(min=1, max=4, halfWide=-1) { // 縦中横の最大桁数、英数字をそのまま／半角／全角にする
+    //constructor(digits=4, halfWide=-1) { // 縦中横の最大桁数、英数字をそのまま／半角／全角にする
         super((content)=>{return ElementString.get('span', this._makeContent(content), this._makeAttrs());});
-        this._digits = digits;
+        this._min = min;
+        this._max = max;
+//        this._digits = digits;
         this._halfWide = halfWide;
     }
     parse(text) {
-        const regexp = new RegExp(`[+]([\\S]{1,${this._digits}}?)[+]`, 'g');
+        const regexp = new RegExp(`[+]([\\S]{${this._min},${this._max}}?)[+]`, 'g');
+        //const regexp = new RegExp(`[+]([\\S]{1,${this._digits}}?)[+]`, 'g');
         //const regexp = new RegExp(`[+]([\\S|^${RegExpChars.NUMBER}${RegExpChars.ALPHABET}]{1,${this._digits}}?)[+]`, 'g');
         return text.replace(regexp, (match, content, offset, string, groups)=>{
             console.debug(content)
@@ -93,32 +102,32 @@ class MarkSpanUpRightOutput extends SpanUpRightOutput { // +縦中横+
     get Style() { return this._style; }
 }
 class SpanUpRightParseSetFactory {
-    static #Wide4 = [new ParseSet(new AutoSpanUpRightOutput(`${RegExpChars.NUMBER}${RegExpChars.ALPHABET}!?！？`, 4, 1)),
-                     new ParseSet(new AutoSpanUpRightOutput(`!?！？`, 2, 1)),
-                     new ParseSet(new MarkSpanUpRightOutput(4, 1))];
-    static #Wide2 = [new ParseSet(new AutoSpanUpRightOutput(`${RegExpChars.NUMBER}${RegExpChars.ALPHABET}!?！？`, 2, 1)),
-                     new ParseSet(new AutoSpanUpRightOutput(`!?！？`, 2, 1)),
-                     new ParseSet(new MarkSpanUpRightOutput(2, 1))];
-    static #Half4 = [new ParseSet(new AutoSpanUpRightOutput(`${RegExpChars.NUMBER}${RegExpChars.ALPHABET}!?！？`, 4, -1)),
-                     new ParseSet(new AutoSpanUpRightOutput(`!?！？`, 2, -1)),
-                     new ParseSet(new MarkSpanUpRightOutput(4, -1))];
-    static #Half2 = [new ParseSet(new AutoSpanUpRightOutput(`${RegExpChars.NUMBER}${RegExpChars.ALPHABET}!?！？`, 2, -1)),
-                     new ParseSet(new AutoSpanUpRightOutput(`!?！？`, 2, -1)),
-                     new ParseSet(new MarkSpanUpRightOutput(2, -1))];
-    static #As4 = [new ParseSet(new AutoSpanUpRightOutput(`${RegExpChars.NUMBER}${RegExpChars.ALPHABET}!?！？`, 4, 0)),
-                     new ParseSet(new AutoSpanUpRightOutput(`!?！？`, 2, 0)),
-                     new ParseSet(new MarkSpanUpRightOutput(4, 0))];
-    static #As2 = [new ParseSet(new AutoSpanUpRightOutput(`${RegExpChars.NUMBER}${RegExpChars.ALPHABET}!?！？`, 2, 0)),
-                     new ParseSet(new AutoSpanUpRightOutput(`!?！？`, 2, 0)),
-                     new ParseSet(new MarkSpanUpRightOutput(2, 0))];
+    static #Wide4 = [new ParseSet(new AutoSpanUpRightOutput(`${RegExpChars.NUMBER}${RegExpChars.ALPHABET}!?！？`, 1, 4, 1)),
+                     new ParseSet(new AutoSpanUpRightOutput(`!?！？`, 2, 2, 1)),
+                     new ParseSet(new MarkSpanUpRightOutput(1, 4, 1))];
+    static #Wide2 = [new ParseSet(new AutoSpanUpRightOutput(`${RegExpChars.NUMBER}${RegExpChars.ALPHABET}!?！？`, 1, 2, 1)),
+                     new ParseSet(new AutoSpanUpRightOutput(`!?！？`, 2, 2, 1)),
+                     new ParseSet(new MarkSpanUpRightOutput(1, 2, 1))];
+    static #Half4 = [new ParseSet(new AutoSpanUpRightOutput(`${RegExpChars.NUMBER}${RegExpChars.ALPHABET}!?！？`, 1, 4, -1)),
+                     new ParseSet(new AutoSpanUpRightOutput(`!?！？`, 2, 2, -1)),
+                     new ParseSet(new MarkSpanUpRightOutput(1, 4, -1))];
+    static #Half2 = [new ParseSet(new AutoSpanUpRightOutput(`${RegExpChars.NUMBER}${RegExpChars.ALPHABET}!?！？`, 1, 2, -1)),
+                     new ParseSet(new AutoSpanUpRightOutput(`!?！？`, 2, 2, -1)),
+                     new ParseSet(new MarkSpanUpRightOutput(1, 2, -1))];
+    static #As4 = [new ParseSet(new AutoSpanUpRightOutput(`${RegExpChars.NUMBER}${RegExpChars.ALPHABET}!?！？`, 1, 4, 0)),
+                     new ParseSet(new AutoSpanUpRightOutput(`!?！？`, 2, 2, 0)),
+                     new ParseSet(new MarkSpanUpRightOutput(1, 4, 0))];
+    static #As2 = [new ParseSet(new AutoSpanUpRightOutput(`${RegExpChars.NUMBER}${RegExpChars.ALPHABET}!?！？`, 1, 2, 0)),
+                     new ParseSet(new AutoSpanUpRightOutput(`!?！？`, 2, 2, 0)),
+                     new ParseSet(new MarkSpanUpRightOutput(1, 2, 0))];
 
-    static #NumberHalf4 = [new ParseSet(new AutoSpanUpRightOutput(`${RegExpChars.NUMBER}`, 4, -1)),
-                           new ParseSet(new MarkSpanUpRightOutput(4, -1))];
-    static #AlphabetHalf4 = [new ParseSet(new AutoSpanUpRightOutput(`${RegExpChars.ALPHABET}`, 4, -1)),
-                             new ParseSet(new MarkSpanUpRightOutput(4, -1))];
+    static #NumberHalf4 = [new ParseSet(new AutoSpanUpRightOutput(`${RegExpChars.NUMBER}`, 1, 4, -1)),
+                           new ParseSet(new MarkSpanUpRightOutput(1, 4, -1))];
+    static #AlphabetHalf4 = [new ParseSet(new AutoSpanUpRightOutput(`${RegExpChars.ALPHABET}`, 1, 4, -1)),
+                             new ParseSet(new MarkSpanUpRightOutput(1, 4, -1))];
 
-    static #Symbol2 = new ParseSet(new AutoSpanUpRightOutput(`!?！？`, 2, 0));
-    static #Mark4 = new ParseSet(new MarkSpanUpRightOutput(4, 0));
+    static #Symbol2 = new ParseSet(new AutoSpanUpRightOutput(`!?！？`, 2, 2, 0));
+    static #Mark4 = new ParseSet(new MarkSpanUpRightOutput(1, 4, 0));
 
     static get Wide4() { return SpanUpRightParseSetFactory.#Wide4; } 
     static get Wide2() { return SpanUpRightParseSetFactory.#Wide2; } 

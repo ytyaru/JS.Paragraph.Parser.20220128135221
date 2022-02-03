@@ -285,7 +285,7 @@ window.addEventListener('load', (event) => {
 
     function testSpanUpRight() {
         let parser = new Parser(SpanUpRightParseSetFactory.Half4);
-        let text = '2022年12月31日。123年1月1日。1234567890円也。\n２０２２年１２月３１日。１２３年１月１日。１２３４５６７８９０円也。π＝３．１４。+π+＝３．１４。＋π＋＝３．１４。A。Ａ。AB。ＡＢ。ABC。ＡＢＣ。HTML。ＨＴＭＬ。ABCDEFG。ＡＢＣＤＥＦＧ。「! ！ ? ？ !?！？1!２！……――、。＄％＆〜：＜＞」'
+        let text = '2022年12月31日。123年1月1日。1234567890円也。\n２０２２年１２月３１日。１２３年１月１日。１２３４５６７８９０円也。π＝３．１４。+π+＝３．１４。＋π＋＝３．１４。A。Ａ。AB。ＡＢ。ABC。ＡＢＣ。HTML。ＨＴＭＬ。ABCDEFG。ＡＢＣＤＥＦＧ。「! ！ ? ？ !?！？1!２！……――、。＄％＆〜：＜＞」\n！。！！。！！！。！！！！。？。？？。？？？。？？？？。！？。！？！？。！？！？！？。!。!!。!!!。?。??。???。!?。!?!?。!?!?!?。'
         let html = parser.parse(text)
         document.body.innerHTML += `<h1>縦中横テスト</h1><p>${text}</p><hr>`;
         document.body.innerHTML += `<h3>Half4</h3><div style="writing-mode:vertical-rl">${html}</div><hr>`
@@ -336,7 +336,7 @@ window.addEventListener('load', (event) => {
         let html = parser.parse(text)
         document.body.innerHTML += `<p>${text}</p>${html}<hr>`
         
-        text = '2022年12月31日。+2022+年+12+月+31+日。｜+2022+｛令和４｝年+12+月+31+日。｜+2022+｛＊令和４＊｝年+12+月+31+日。２０２２年１２月３１日。\nπ+π+｜+π+｛パイ｝。｜+π+｛＊パイ＊｝\nA。AB。ABC。ABCD。ABCDE。ABCDEFG。Ａ。ＡＢ。ＡＢＣ。ＡＢＣＤ。ＡＢＣＤＥ。ＡＢＣＤＥＦＧ。\n　１．選択肢１\n　２．選択肢２\n　３．選択肢３'
+        text = '2022年12月31日。+2022+年+12+月+31+日。｜+2022+｛令和４｝年+12+月+31+日。｜+2022+｛＊令和４＊｝年+12+月+31+日。２０２２年１２月３１日。\nπ+π+｜+π+｛パイ｝。｜+π+｛＊パイ＊｝\nA。AB。ABC。ABCD。ABCDE。ABCDEFG。Ａ。ＡＢ。ＡＢＣ。ＡＢＣＤ。ＡＢＣＤＥ。ＡＢＣＤＥＦＧ。\n　１．選択肢１\n　２．選択肢２\n　３．選択肢３\nエクスクラメーション！エクスクラメーション！！エクスクラメーション！！！\nクエスチョン？クエスチョン？？クエスチョン？？？'
         html = parser.parse(text)
         document.body.innerHTML += `<h3>縦中横＋ルビ＋強調</h3><p>${text}</p><div style="writing-mode:vertical-rl">${html}</div>`
         document.body.innerHTML += `<h4>現状の動作</h4><ul><li>縦中横はルビや強調と併用できない\n<li>自動縦中横の対象なのに手動で縦中横にしようとしたらバグる\n</ul></p><hr>`
